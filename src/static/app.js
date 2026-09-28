@@ -25,6 +25,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeLoginModal = document.querySelector(".close-login-modal");
   const loginMessage = document.getElementById("login-message");
 
+  // Theme controls
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+
+  function setTheme(isDark) {
+    document.body.classList.toggle("dark-mode", isDark);
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    const nextThemeLabel = `Switch to ${isDark ? "light" : "dark"} mode`;
+    themeToggle.setAttribute("aria-label", nextThemeLabel);
+    themeToggle.title = nextThemeLabel;
+    themeIcon.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }
+
+  setTheme(localStorage.getItem("theme") === "dark");
+  themeToggle.addEventListener("click", () => {
+    setTheme(!document.body.classList.contains("dark-mode"));
+  });
+
   // Activity categories with corresponding colors
   const activityTypes = {
     sports: { label: "Sports", color: "#e8f5e9", textColor: "#2e7d32" },
@@ -774,11 +793,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(confirmDialog);
 
       // Style the buttons
-      const cancelBtn = confirmDialog.querySelector("#cancel-button");
       const confirmBtn = confirmDialog.querySelector("#confirm-button");
-
-      cancelBtn.style.backgroundColor = "#f1f1f1";
-      cancelBtn.style.color = "#333";
 
       confirmBtn.style.backgroundColor = "#dc3545";
       confirmBtn.style.color = "white";
